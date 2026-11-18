@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily Invidious restart (upstream: "at least once a day, ideally hourly" — set OnCalendar=hourly for public instances)
+
+[Timer]
+OnCalendar=*-*-* 04:15:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

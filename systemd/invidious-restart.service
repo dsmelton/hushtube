@@ -1,0 +1,14 @@
+[Unit]
+Description=Restart Invidious containers (required by upstream: at least daily, ideally hourly)
+
+[Service]
+Type=oneshot
+# The restart runs detached via scripts/restart-invidious.sh: stopping a rootless
+# container with port bindings hangs the podman client inside a systemd unit
+# (rootlessport crash) although the restart itself succeeds. KillMode=process lets
+# the detached work finish after this unit exits cleanly.
+KillMode=process
+ExecStart=/bin/sh -c 'setsid %h/hushtube/scripts/restart-invidious.sh </dev/null >/dev/null 2>&1 & exit 0'
+
+[Install]
+WantedBy=default.target
