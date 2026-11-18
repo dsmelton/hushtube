@@ -1,0 +1,21 @@
+[Unit]
+Description=Invidious -> Chromecast bridge (tailnet-only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=INVIDIOUS_URL=http://127.0.0.1:3000
+Environment=CASTBRIDGE_PORT=8300
+# Bind the Tailscale address only — never 0.0.0.0.
+Environment=CASTBRIDGE_BIND=<TAILNET_IP>
+Environment=CASTBRIDGE_HOST_IP=<TAILNET_IP>
+# gunicorn (L4): 1 worker ON PURPOSE — cast/media state (_current, _last_mode, _devices) is
+# in-process; multiple workers would fork it apart. Concurrency comes from threads.
+ExecStart=%h/hushtube/castbridge/.venv/bin/gunicorn -w 1 --threads 8 -b <TAILNET_IP>:8300 app:app
+WorkingDirectory=%h/hushtube/castbridge
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

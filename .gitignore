@@ -1,0 +1,11 @@
+.env
+*.keystore
+*.jks
+
+# APK project (machine-specific / secrets)
+apk/local.properties
+apk/keystore.properties
+apk/.gradle/
+apk/build/
+*.apk
+castbridge/SmartTube.apk
